@@ -16,7 +16,7 @@ setup(
     install_requires=[
         'certifi>=2017.7.27.1',
         'chardet>=3.0.4',
-        'elasticsearch>=6.30.0',
+        'elasticsearch>=6.3.0',
         'elasticsearch-dsl>=6.1.00',
         'idna>=2.6',
         'isodate>=0.5.4',
