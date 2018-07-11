@@ -253,6 +253,9 @@ def make_input_regnskab_from_search(s):
 
 
 def producer_scan(search_result, queue, queue_lock=None):
+    print(search_result)
+    print(search_result.to_dict())
+
     for document in search_result.scan(preserve_order=True):
         erst_id = document.meta.id
         cvrnummer = document['cvrNummer']
