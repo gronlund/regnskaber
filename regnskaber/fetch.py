@@ -8,11 +8,10 @@ import time
 from datetime import datetime
 from multiprocessing import Process, Lock
 
-import elasticsearch1
 import requests
 
-from elasticsearch1 import Elasticsearch
-from elasticsearch1_dsl import Search
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 
 from .ioqueue import IOQueueManager
 
@@ -254,7 +253,7 @@ def make_input_regnskab_from_search(s):
 
 
 def producer_scan(search_result, queue, queue_lock=None):
-    for document in search_result.scan():
+    for document in search_result.scan(preserve_order=True):
         erst_id = document.meta.id
         cvrnummer = document['cvrNummer']
         # cvrnummer is possibly None, e.g. Greenland companies
@@ -289,11 +288,12 @@ def producer_scan(search_result, queue, queue_lock=None):
 
 
 def get_virk_search(from_date):
-    client = elasticsearch1.Elasticsearch('http://distribution.virk.dk:80',
+    client = Elasticsearch('http://distribution.virk.dk:80',
                                           timeout=300)
     s = Search(using=client, index='offentliggoerelser')
     s = s.filter('range', offentliggoerelsesTidspunkt={'gte': from_date})
     s = s.sort('offentliggoerelsesTidspunkt')
+
     return s
 
 

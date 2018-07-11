@@ -1,7 +1,7 @@
 certifi==2017.7.27.1
 chardet==3.0.4
-elasticsearch1==1.10.0
-elasticsearch1-dsl==0.0.12
+elasticsearch>=6.3
+elasticsearch-dsl>=6.1.0
 idna==2.6
 isodate==0.5.4
 langdetect==1.0.7
