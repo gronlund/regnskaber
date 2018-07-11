@@ -40,7 +40,7 @@ Setup
 The module can be installed using pip after installing the dependencies mentioned earlier.
 Run the following command:
 
-``pip install --process-dependency-links git+https://github.com/jasn/regnskaber``
+``pip install --process-dependency-links git+https://github.com/gronlund/regnskaber``
 
 This should install regnskaber as a module in your current python environment.
 
