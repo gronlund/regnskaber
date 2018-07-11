@@ -5,19 +5,19 @@ from setuptools import find_packages, setup
 
 setup(
     name='Regnskaber',
-    version=0.1,
-    url='https://github.com/jasn/regnskaber',
+    version=0.11,
+    url='https://github.com/gronlud/regnskaber',
     description=('A financial statement fetching module from the Danish '
                  'Business Authority'),
-    author='Jesper S. Nielsen',
-    author_email='jesper.sindahl.nielsen@gmail.com',
+    # author='Allan Grønlund, Jesper S. Nielsen',
+    # author_email='jesper.sindahl.nielsen@gmail.com',
     license='MIT',
     packages=['regnskaber'],
     install_requires=[
         'certifi>=2017.7.27.1',
         'chardet>=3.0.4',
-        'elasticsearch1>=1.10.0',
-        'elasticsearch1-dsl>=0.0.12',
+        'elasticsearch>=6.30.0',
+        'elasticsearch-dsl>=6.1.00',
         'idna>=2.6',
         'isodate>=0.5.4',
         'langdetect>=1.0.7',
