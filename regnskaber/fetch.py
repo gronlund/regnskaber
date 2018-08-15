@@ -252,11 +252,25 @@ def make_input_regnskab_from_search(s):
                          xbrl_extension_url, erst_id, indlaesningsTidspunkt)
 
 
+def retry_generator(g):
+    failed = 0
+    while True:
+        try:
+            yield next(g)
+        except StopIteration:
+            return
+        except Exception as e:
+            failed += 1
+            print(e)
+            if failed > 10:
+                raise
+
+
 def producer_scan(search_result, queue, queue_lock=None):
     print(search_result)
     print(search_result.to_dict())
 
-    for document in search_result.scan():
+    for document in retry_generator(search_result.scan()):
         erst_id = document.meta.id
         cvrnummer = document['cvrNummer']
         # cvrnummer is possibly None, e.g. Greenland companies

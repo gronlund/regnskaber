@@ -1,4 +1,4 @@
-""" This module is responsible for inserting each 'regnskab'. """
+""" This module is responsible for inserting each financial statement 'regnskab'. """
 import datetime
 
 import xbrl_ai
