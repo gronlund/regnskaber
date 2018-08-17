@@ -208,7 +208,7 @@ def consumer_insert(queue, unit_handler=None, queue_lock=None):
             msg = queue.get()
             popped, pushed = queue.get_statistics()
             print(ERASE + 'Inserting into db: %s/%s' % (popped, pushed),
-                  end='', flush=True)
+                  end='', flush=True, file=sys.stderr)
         finally:
             queue_lock.release()
             if do_sleep:
@@ -262,6 +262,7 @@ def retry_generator(g):
         except Exception as e:
             failed += 1
             print(e)
+            print('retry generator')
             if failed > 10:
                 raise
 
@@ -299,14 +300,17 @@ def producer_scan(search_result, queue, queue_lock=None):
             queue.put(msg)
             popped, pushed = queue.get_statistics()
             print(ERASE + 'Inserting into db: %s/%s' % (popped, pushed),
-                  end='', flush=True)
+                  end='', flush=True, file=sys.stderr)
             queue_lock.release()
     return
 
 
 def get_virk_search(from_date):
     client = Elasticsearch('http://distribution.virk.dk:80',
-                                          timeout=300)
+                           timeout=300,
+                           max_retries=10,
+                           retry_on_timeout=True,
+                           http_compress=True)
     s = Search(using=client, index='offentliggoerelser')
     s = s.filter('range', offentliggoerelsesTidspunkt={'gte': from_date})
     s = s.sort('offentliggoerelsesTidspunkt')
@@ -319,6 +323,9 @@ def fetch_to_db(process_count=1, from_date=datetime(2011, 1, 1)):
 
     unit_handler = UnitHandler()
     s = get_virk_search(from_date)
+    params = {'scroll': u'20m', 'size': 256}
+    s = s.params(**params)
+
     try:
         tmp_file = tempfile.NamedTemporaryFile(delete=False)
         m = IOQueueManager()
@@ -348,4 +355,5 @@ def fetch_to_db(process_count=1, from_date=datetime(2011, 1, 1)):
     finally:
         os.remove(tmp_file.name)
         pass
+    print('Download Completed')
     return
