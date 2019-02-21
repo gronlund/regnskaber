@@ -6,6 +6,7 @@ from . import (interactive_ensure_config_exists, setup_database_connection,
 
 from . import fetch
 from . import make_feature_table as transform
+from . import make_feature_table_json
 
 
 class Commands:
@@ -24,6 +25,14 @@ class Commands:
         transform.main(table_definition_file)
 
     @staticmethod
+    def transform_json(table_definition_file, **general_options):
+        interactive_ensure_config_exists()
+        # setup engine and Session.
+        setup_database_connection()
+        make_feature_table_json.main(table_definition_file)
+        
+
+    @staticmethod
     def reconfigure(**general_options):
         interactive_configure_connection()
 
@@ -31,7 +40,6 @@ parser = argparse.ArgumentParser()
 
 subparsers = parser.add_subparsers(dest='command')
 subparsers.required = True
-
 parser_fetch = subparsers.add_parser('fetch', help='fetch from erst')
 parser_fetch.add_argument('-f', '--from-date',
                           dest='from_date',
@@ -53,6 +61,12 @@ parser_transform.add_argument('table_definition_file', type=str,
                               help=('A file that specifies the table to be '
                                     'created. If the table name already '
                                     'exists, it is first deleted.'))
+
+parser_transform_json = subparsers.add_parser('transform_json',
+                                         help=('build useful json table from data '
+                                               'fetched from erst.'))
+parser_transform_json.add_argument('table_definition_file', type=str,
+                                   help=('A file that specifies the table to be created. If the table name already exists, it is first deleted.'))
 
 parser_reconfigure = subparsers.add_parser('reconfigure',
                                            help='Reconfigure database info.')

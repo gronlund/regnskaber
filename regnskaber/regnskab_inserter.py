@@ -25,6 +25,8 @@ def insert_regnskab(regnskab):
         y = xbrl_local.xbrl_ai_dk.xbrldict_to_xbrl_dk_64(x)
         financial_statement = initialize_financial_statement(regnskab)
         session.add(financial_statement)
+
+
         for key, val in y.items():
             if key in ('{http://www.xbrl.org/2003/linkbase}schemaRef',
                        '@{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'):

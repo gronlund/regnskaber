@@ -18,6 +18,30 @@ from . import Session, engine
 current_regnskabs_id = 0
 
 
+def get_most_precise(regnskab_tuples):
+    """ Returns the 'best' value for a given entry in a financial statement """
+
+    def order_key(t):
+        """
+        Key for tuple of regnskabsid, fieldname, fieldvalue, decimals,
+        precision, startDate, endDate, unitId.
+        """
+        dec = -1000
+        if (t.decimals is not None and len(t.decimals) > 0 and
+                t.decimals.lower() != 'inf'):
+            dec = float(t.decimals)
+        is_dec_inf = False
+        if t.decimals is not None and t.decimals.lower() == 'inf':
+            is_dec_inf = True
+
+        return (t.startDate, t.endDate, is_dec_inf,
+                dec, t.fieldValue)
+
+    regnskab_tuples.sort(key=order_key, reverse=True)
+    
+    return regnskab_tuples[0].fieldValue
+
+
 def generic_number(regnskab_dict, fieldName, when_multiple=None,
                    dimensions=None):
     # The following dict is based on 'årsregnskabsloven', see
@@ -65,6 +89,8 @@ def generic_number(regnskab_dict, fieldName, when_multiple=None,
         'fsa:LongtermLiabilitiesOtherThanProvisions',
         'fsa:ShorttermLiabilitiesOtherThanProvisions',
     }
+    #regnskabsform_defaults = regnskabsform_defaults.union({x+'_prev' for x in regnskabsform_defaults})
+    
     try:
         values = [t for t in regnskab_dict[fieldName]]
         if dimensions is not None:
@@ -73,12 +99,12 @@ def generic_number(regnskab_dict, fieldName, when_multiple=None,
         if len(values) == 0:
             raise ValueError('No tuples with fieldName %s' % fieldName)
         most_precise = get_most_precise(values)
-        return most_precise
+        return float(most_precise)
     except (ValueError, KeyError):
         pass
-    regnskabs_id = find_regnskabs_id()
-    if regnskabs_id == 0:
-        pprint(regnskab_dict, indent=2)
+    # regnskabs_id = find_regnskabs_id()
+    # if regnskabs_id == 0:
+    #     pprint(regnskab_dict, indent=2)
 
     if fieldName in regnskabsform_defaults:
         return 0
@@ -171,11 +197,12 @@ def make_header(fs_dict, financial_statement_id, consolidated, session):
         'consolidated': consolidated
     }
 
-    try:
+    try:        
         header_values['gsd_IdentificationNumberCvrOfReportingEntity'] = (
             generic_number(fs_dict,
                            'gsd:IdentificationNumberCvrOfReportingEntity')
         )
+        
     except ValueError:
         header_values['gsd_IdentificationNumberCvrOfReportingEntity'] = None
 
@@ -296,7 +323,7 @@ def populate_row(table_description, fs_entries, fs_id,
                 regnskabs_fieldname,
                 dimensions=dimensions,
             )
-
+            
     return result
 
 
@@ -342,12 +369,9 @@ def find_regnskabs_id():
 def find_currency(fs_dict):
     """Check balance statements of regnskab to find the currency used.  We assume
     the same currency is used for everything, though this is not a requirement.
-
     regnskab_dict -- dict of fieldname to corresponding tuples for regnskab.
-
     returns the ISO name for the currency used, and defaults to 'DKK'
     otherwise.
-
     """
     balance_keys = set(['fsa:Equity', 'fsa:Assets', 'fsa:LiabilitiesAndEquity',
                         'fsa:CurrentAssets', 'fsa:ContributedCapital',
@@ -390,27 +414,6 @@ def find_balancedato(fs_dict):
     return None
 
 
-def get_most_precise(regnskab_tuples):
-    """ Returns the 'best' value for a given entry in a financial statement """
-
-    def order_key(t):
-        """
-        Key for tuple of regnskabsid, fieldname, fieldvalue, decimals,
-        precision, startDate, endDate, unitId.
-        """
-        dec = -1000
-        if (t.decimals is not None and len(t.decimals) > 0 and
-                t.decimals.lower() != 'inf'):
-            dec = float(t.decimals)
-        is_dec_inf = False
-        if t.decimals is not None and t.decimals.lower() == 'inf':
-            is_dec_inf = True
-
-        return (t.startDate, t.endDate, is_dec_inf,
-                dec, t.fieldValue)
-
-    regnskab_tuples.sort(key=order_key, reverse=True)
-    return regnskab_tuples[0].fieldValue
 
 
 def fieldname_to_colname(fieldname):
