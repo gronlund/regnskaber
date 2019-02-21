@@ -127,7 +127,7 @@ def create_table(table_description, drop_table=False):
                Column('data', JSON)]
 
     print('creating table', tablename)
-    t = Table(tablename, metadata, *columns)
+    t = Table(tablename, metadata, *columns, mysql_ROW_FORMAT='COMPRESSED')
     if drop_table:
         t.drop(engine, checkfirst=True)
         t.create(engine, checkfirst=False)
