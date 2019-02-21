@@ -173,11 +173,11 @@ def tag_previous_reporting_period(fs_entries):
     end_date = None
     last_end_date = None
     if start_field in data_dict:
-        start_date = datetime.datetime.strptime(data_dict[start_field].fieldValue[:10], date_format)
+        start_date = datetime.datetime.strptime(data_dict[start_field][0].fieldValue[:10], date_format)
     if end_field in data_dict:
-        end_date = datetime.datetime.strptime(data_dict[end_field].fieldValue[:10], date_format)
+        end_date = datetime.datetime.strptime(data_dict[end_field][0].fieldValue[:10], date_format)
     if last_end_field in data_dict:
-        last_end_date = datetime.datetime.strptime(data_dict[last_end_field].fieldValue[:10], date_format)
+        last_end_date = datetime.datetime.strptime(data_dict[last_end_field][0].fieldValue[:10], date_format)
 
     result = []
     
