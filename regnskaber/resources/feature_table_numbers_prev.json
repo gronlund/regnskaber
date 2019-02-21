@@ -1339,7 +1339,6 @@
 	    "when_multiple": "concatenate"	    
         }
       },
-
       {
         "sqltype": "Text",
         "regnskabs_fieldname": "cmn:OpinionOnAuditedFinancialStatements",

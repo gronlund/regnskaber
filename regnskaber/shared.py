@@ -6,7 +6,6 @@ from .models import FinancialStatement
 from . import Session
 
 from sqlalchemy.sql.expression import func
-from itertools import groupby
 
 
 def get_reporting_period(fs_entries):
@@ -213,12 +212,6 @@ def tag_previous_reporting_period(fs_entries):
                         (max_date - parsed_entry.endDate) >= datetime.timedelta(days=360)):
                     parsed_entry.fieldName = parsed_entry.fieldName + prev_tag
                 result.append(parsed_entry)
-    # if fs_entries[0].cvrnummer == 21854794:
-    #     import pdb
-    #     import pprint
-    #     pprint.pprint(sorted([(x.fieldName, x.fieldValue) for x in result], key = lambda k: k[0]))
-    #     pdb.set_trace()
-    
     return result
                 
 

@@ -60,7 +60,6 @@ def populate_row(table_description, fs_entries, fs_id,
         if out is not None:
             data[column_name] = out
     result['data'] = data
-    #pdb.set_trace()
     return result
 
 
@@ -69,7 +68,7 @@ def populate_table(table_description, table):
     assert(isinstance(table, Table))
     print("Populating table %s" % table_description['tablename'])
     cache = []
-    cache_sz = 2000
+    cache_sz = 1000
     fs_iterator = financial_statement_iterator(data_transform=tag_previous_reporting_period)
     ERASE = '\r\x1B[K'
     progress_template = "Processing financial statements %s/%s"
