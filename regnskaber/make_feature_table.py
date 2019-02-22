@@ -107,7 +107,7 @@ def generic_number(regnskab_dict, fieldName, when_multiple=None,
     #     pprint(regnskab_dict, indent=2)
 
     if fieldName in regnskabsform_defaults:
-        return 0
+        return 0.0
     return None
 
 

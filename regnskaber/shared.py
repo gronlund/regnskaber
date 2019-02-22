@@ -6,6 +6,7 @@ from .models import FinancialStatement
 from . import Session
 
 from sqlalchemy.sql.expression import func
+from collections import namedtuple
 
 
 def get_reporting_period(fs_entries):
@@ -157,6 +158,13 @@ def tag_previous_reporting_period(fs_entries):
 
     """
     prev_tag = '_prev'
+    tuple_entry = namedtuple('tuple_entry', ['id', 'financial_statement_id', 'fieldName', 'fieldValue', 'decimals', 'cvrnummer', 'startDate', 'endDate', 'dimensions', 'unitIdXbrl', 'koncern'])
+
+    def make_prev_tuple(__entry__):
+        dt = {x: __entry__.__dict__[x] for x in tuple_entry._fields}
+        dt['fieldName'] = dt['fieldName'] + prev_tag
+        return tuple_entry(**dt)
+            
     data_dict = {}
     for elm in fs_entries:
         if elm.fieldName in data_dict:
@@ -185,14 +193,12 @@ def tag_previous_reporting_period(fs_entries):
             return None
         elif date_is_instant(entry.startDate, entry.endDate):
             if not date_is_in_range(start_date, end_date, entry.endDate):
-                entry.fieldName = entry.fieldName + prev_tag
-                return entry
+                return make_prev_tuple(entry)
             elif (last_end_date is not None) and (entry.endDate <= last_end_date):
-                entry.fieldName = entry.fieldName + prev_tag
-                return entry
+                return make_prev_tuple(entry)
         elif (not date_is_in_range(start_date, end_date, entry.startDate) or
                 not date_is_in_range(start_date, end_date, entry.endDate)):
-            entry.fieldName = entry.fieldName + prev_tag
+            return make_prev_tuple(entry)
         return entry
 
     for key, items in data_dict.items():
@@ -210,7 +216,7 @@ def tag_previous_reporting_period(fs_entries):
                 parsed_entry = parse_entry(_entry)
                 if not parsed_entry.fieldName.endswith(prev_tag) and (
                         (max_date - parsed_entry.endDate) >= datetime.timedelta(days=360)):
-                    parsed_entry.fieldName = parsed_entry.fieldName + prev_tag
+                    parsed_entry = make_prev_tuple(parsed_entry)
                 result.append(parsed_entry)
     return result
                 
