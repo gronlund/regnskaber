@@ -160,8 +160,9 @@ def tag_previous_reporting_period(fs_entries):
     prev_tag = '_prev'
     tuple_entry = namedtuple('tuple_entry', ['id', 'financial_statement_id', 'fieldName', 'fieldValue', 'decimals', 'cvrnummer', 'startDate', 'endDate', 'dimensions', 'unitIdXbrl', 'koncern'])
 
-    def make_prev_tuple(__entry__):
-        dt = {x: __entry__.__dict__[x] for x in tuple_entry._fields}
+    def make_prev_tuple(my_entry):
+        dd = my_entry.__dict__
+        dt = {x: dd[x] for x in tuple_entry._fields}
         dt['fieldName'] = dt['fieldName'] + prev_tag
         return tuple_entry(**dt)
             
@@ -196,8 +197,7 @@ def tag_previous_reporting_period(fs_entries):
                 return make_prev_tuple(entry)
             elif (last_end_date is not None) and (entry.endDate <= last_end_date):
                 return make_prev_tuple(entry)
-        elif (not date_is_in_range(start_date, end_date, entry.startDate) or
-                not date_is_in_range(start_date, end_date, entry.endDate)):
+        elif not (date_is_in_range(start_date, end_date, entry.startDate) or date_is_in_range(start_date, end_date, entry.endDate)):
             return make_prev_tuple(entry)
         return entry
 

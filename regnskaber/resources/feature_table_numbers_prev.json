@@ -1374,7 +1374,34 @@
             "name": "generic_text",
 	    "when_multiple": "concatenate"	    
         }
-      }	
+      },
+      {
+        "sqltype": "Text",
+        "regnskabs_fieldname": "arr:DescriptionsOfQualificationsOfReviewedFinancialStatements",
+        "dimensions": null,
+        "method": {
+            "name": "generic_text",
+	    "when_multiple": "concatenate"
+        }
+      },
+      {
+        "sqltype": "Text",
+        "regnskabs_fieldname": "arr:DescriptionOfQualificationsOfAuditedFinancialStatements",
+        "dimensions": null,
+        "method": {
+          "name": "generic_text",
+          "when_multiple": "concatenate"
+        }
+      },
+      {
+        "sqltype": "Text",
+        "regnskabs_fieldname": "arr:DescriptionOfQualificationsOfFinancialStatementsExtendedReview",
+        "dimensions": null,
+        "method": {
+            "name": "generic_text",
+            "when_multiple": "concatenate"	   
+        }
+      }
     ]
   }
 ]
