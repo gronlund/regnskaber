@@ -77,12 +77,14 @@ def populate_table(table_description, table):
         print(progress_template % (i, end), end='', flush=True)
         partition = partition_consolidated(fs_entries)
         fs_entries_cons, fs_entries_solo = partition
+        # if there is consolidated then that is what we need to use
         if len(fs_entries_cons):
             row_values = populate_row(table_description, fs_entries_cons,
                                       fs_id, consolidated=True)
             if row_values:
                 cache.append(row_values)
-        if len(fs_entries_solo):
+        else:
+            assert len(fs_entries_solo)
             row_values = populate_row(table_description, fs_entries_solo,
                                       fs_id, consolidated=False)
             if row_values:
