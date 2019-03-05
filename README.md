@@ -2,7 +2,10 @@ Regnskaber
 ==========
 
 This is a Python3 module for downloading financial statements from the Danish
-Business Authority (Erhvervsstyrelsen).  There are two primary features:
+Business Authority (Erhvervsstyrelsen).  This is a fork from our initial project since Jesper is no longer working on it.
+So far only a few changes has been made, most importantly that the elasticsearch package is updated since the elasticsearch server was.
+
+There are two primary features:
 ``fetch`` and ``transform``.
 
 The ``fetch`` command is used for getting the raw data from the Danish Business authority into an SQL store (MySQL or Postgres). 
