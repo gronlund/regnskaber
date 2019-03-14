@@ -88,7 +88,7 @@ def interactive_configure_connection():
         config.write(fp)
     return
 
-
+    
 def interactive_ensure_config_exists():
     if not config_path.exists():
         print('No configuration file found.')
