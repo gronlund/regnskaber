@@ -1298,9 +1298,25 @@
           "name": "generic_text"
         }
       },
-	{
+      {
+        "sqltype": "Datetime",
+        "regnskabs_fieldname": "gsd:DateOfApprovalOfReport",
+        "dimensions": null,
+        "method": {
+          "name": "generic_text"
+        }
+      },
+      {
+        "sqltype": "Datetime",
+        "regnskabs_fieldname": "gsd:DateOfApprovalOfAnnualReport",
+        "dimensions": null,
+        "method": {
+          "name": "generic_text"
+        }
+      },
+      {
         "sqltype": "Text",
-        "regnskabs_fieldname": "gsd:DateOfGeneralMeeting",
+        "regnskabs_fieldname": "arr:SignatureOfAuditorsDate",
         "dimensions": null,
         "method": {
           "name": "generic_text"
