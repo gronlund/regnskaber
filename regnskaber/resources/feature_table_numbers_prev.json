@@ -1289,10 +1289,10 @@
         "method": {
           "name": "generic_text"
         }
-      },	
+      },
       {
         "sqltype": "Datetime",
-        "regnskabs_fieldname": "gsd:DateOfApprovalOfReport",
+        "regnskabs_fieldname": "gsd:DateOfGeneralMeeting",
         "dimensions": null,
         "method": {
           "name": "generic_text"
@@ -1308,7 +1308,7 @@
       },
       {
         "sqltype": "Datetime",
-        "regnskabs_fieldname": "gsd:DateOfApprovalOfAnnualReport",
+        "regnskabs_fieldname": "sob:DateOfApprovalOfAnnualReport",
         "dimensions": null,
         "method": {
           "name": "generic_text"
